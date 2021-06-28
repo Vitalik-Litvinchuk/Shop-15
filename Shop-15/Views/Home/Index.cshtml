@@ -1,8 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@*@model IEnumerable<Shop_15.Models.Product>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+@foreach (Product item in Model)
+{
+    <form method="post">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4">
+                    <img src="@item.Image" />
+                </div>
+            </div>
+        </div>
+    </form>
+}*@
