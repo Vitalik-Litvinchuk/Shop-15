@@ -1,15 +1,38 @@
-﻿@*@model IEnumerable<Shop_15.Models.Product>
+﻿@model Shop_15.Models.ViewModels.HomeVM
 
-<div class="text-danger" asp-validation-summary="ModelOnly"></div>
-@foreach (Product item in Model)
-{
-    <form method="post">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-4">
-                    <img src="@item.Image" />
-                </div>
-            </div>
-        </div>
-    </form>
-}*@
+<div class="container">
+    <div class="text-center">
+        <button class="btn btn-dark px-3 py-1 filter-btn" data-filter="all">
+            All
+        </button>
+        @foreach (var item in Model.Categories)
+        {
+            <button class="btn btn-dark px-3 py-1 filter-btn" data-filter="@item.Name">
+                @item.Name
+            </button>
+        }
+    </div>
+    <br />
+    <div class="row">
+        @foreach (var item in Model.Products)
+        {
+            <partial model="item" name="_productCard" />
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $(".filter-btn").click(function () {
+                let value = $(this).attr('data-filter');
+                if (value == "all") {
+                    $(".filter").show("1000");
+                } else {
+                    $(".filter").not("." + value).hide("3000");
+                    $(".filter").filter("." + value).show("3000");
+                }
+            })
+        })
+    </script>
+}

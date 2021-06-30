@@ -63,7 +63,7 @@ namespace Shop_15.Controllers
                 var files = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnviroment.WebRootPath;
 
-                string upload = webRootPath + ENV.productImage;
+                string upload = webRootPath + ENV.PathImage;
                 string fileName = Guid.NewGuid().ToString();
                 string extension = "";
                 if (files.Count > 0)
@@ -72,7 +72,6 @@ namespace Shop_15.Controllers
                     using (FileStream fs = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
                         files[0].CopyTo(fs);
                 }
-
                 if (productVM.Product.Id == 0)
                 {
                     productVM.Product.Image = fileName + extension;
@@ -126,7 +125,7 @@ namespace Shop_15.Controllers
             if (product != null)
             {
                 if (product.Image != null)
-                    System.IO.File.Delete(Path.Combine(_webHostEnviroment.WebRootPath + ENV.productImage, product.Image));
+                    System.IO.File.Delete(Path.Combine(_webHostEnviroment.WebRootPath + ENV.PathImage, product.Image));
 
                 _db.Products.Remove(product);
                 _db.SaveChanges();
