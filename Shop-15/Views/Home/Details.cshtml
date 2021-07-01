@@ -1,0 +1,27 @@
+﻿@model Shop_15.Models.ViewModels.DetailVM
+
+<div class="col">
+    <a asp-action="Index" class="btn btn-warning"><i class="fas fa-sign-out-alt"></i>Back</a>
+    @*<a asp-action="Index" class="btn btn-success"><i class="fas fa-sign-out-alt"></i>Add to cart</a>*@
+</div>
+
+<div class="pb-4 filter @Model.Product.Category.Name">
+    <div class="bg-white">
+        <div class="px-3 pt-3 pb-1 row">
+            <div class="col-9"><h1 class="float-left">@Model.Product.Name</h1></div>
+            <div class="col-3"><h1 class="float-right"><span class="text-info">&#8372; @Model.Product.Price</span></h1> </div>
+            <span class="badge p-2 border w-100" style="background-color:azure">@Model.Product.Category.Name</span>
+        </div>
+        <div class="col-6 m-auto">
+            <img class="img-fluid d-block mx-auto mb-3" src="@ENV.PathImage@Model.Product.Image">
+        </div>
+        @*<div class="col-12 pt-2" style="font-size:13px; text-align:justify">
+            @Model.Product.ShortDescription
+        </div>*@
+        <div class="p-1 px-3 row">
+            <div class="col-12 pt-2" style="font-size:13px; text-align:justify">
+                @Html.Raw(@Model.Product.Description)
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,6 @@ namespace Shop_15
 {
     public class ENV
     {
-        public const string productImage = @"/images/products/"; 
+        public const string PathImage = @"/images/products/"; 
     }
 }
