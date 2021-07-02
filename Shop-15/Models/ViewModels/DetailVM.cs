@@ -13,6 +13,6 @@ namespace Shop_15.Models.ViewModels
         }
 
         public Product Product { get; set; }
-
+        public bool InCart { get; set; }
     }
 }

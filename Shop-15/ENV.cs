@@ -7,6 +7,7 @@ namespace Shop_15
 {
     public class ENV
     {
-        public const string PathImage = @"/images/products/"; 
+        public const string PathImage = @"/images/products/";
+        public const string SessionCart = "ShoppingCartSession";
     }
 }
