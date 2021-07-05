@@ -26,6 +26,13 @@ namespace Shop_15
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddHttpContextAccessor();
+            services.AddSession(SO =>
+            {
+                SO.IdleTimeout = TimeSpan.FromDays(1);
+                SO.Cookie.HttpOnly = true;
+                SO.Cookie.IsEssential = true;
+            });
             services.AddControllersWithViews();
         }
 
@@ -48,6 +55,8 @@ namespace Shop_15
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
