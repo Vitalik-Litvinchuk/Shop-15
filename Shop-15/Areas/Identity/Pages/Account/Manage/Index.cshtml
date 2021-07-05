@@ -1,0 +1,79 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h4>@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<div class="row">
+    <div class="col-md-6">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="appUser.Name"></label>
+                <input asp-for="appUser.Name" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="appUser.Surname"></label>
+                <input asp-for="appUser.Surname" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="appUser.Age"></label>
+                <input asp-for="appUser.Age" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="appUser.Gender"></label>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2">
+                            <input id="gendercb" onclick="GetGender()" asp-for="appUser.Gender" class="form-control" />
+                        </div>
+                        <div class="col">
+                            @if (Model.appUser.Gender)
+                            {
+                                <h3 id="gender">Male</h3>
+                            }
+                            else
+                            {
+                                <h3 id="gender">Female</h3>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <span asp-validation-for="appUser.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="appUser.City"></label>
+                <input asp-for="appUser.City" class="form-control" />
+                <span asp-validation-for="appUser.City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="appUser.Country"></label>
+                <input asp-for="appUser.Country" class="form-control" />
+                <span asp-validation-for="appUser.Country" class="text-danger"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script type="text/javascript">
+    function GetGender() {
+        var gender = $("#gendercb").prop('checked');
+        if (gender)
+            document.getElementById("gender").innerHTML = 'Male';
+        else
+            document.getElementById("gender").innerHTML = 'Female';
+    }
+</script>
