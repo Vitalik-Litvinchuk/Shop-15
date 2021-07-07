@@ -15,7 +15,6 @@ namespace Shop_15.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-        public AppUser appUser { get; set; }
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
@@ -39,6 +38,8 @@ namespace Shop_15.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public AppUser appUser { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
@@ -48,7 +49,8 @@ namespace Shop_15.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                appUser = user as AppUser
             };
         }
 
@@ -60,7 +62,6 @@ namespace Shop_15.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            appUser = user as AppUser;
             await LoadAsync(user);
             return Page();
         }
@@ -90,9 +91,12 @@ namespace Shop_15.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            //(user as AppUser).Gender = appUser.Gender;
-            //(user as AppUser).City = appUser.City;
-            //(user as AppUser).Country = appUser.Country;
+            await Task.Run(() =>
+            {
+                (user as AppUser).Gender = Input.appUser.Gender;
+                (user as AppUser).City = Input.appUser.City;
+                (user as AppUser).Country = Input.appUser.Country;
+            });
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
