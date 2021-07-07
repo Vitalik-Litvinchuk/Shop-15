@@ -53,6 +53,10 @@
                         <li>
                             <partial name="_LoginPartial" />
                         </li>
+                        @if (User.IsInRole(ENV.AdminRole))
+                        {
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Register">Create new admin</a>
+                        }
                     </ul>
                 </div>
             </div>

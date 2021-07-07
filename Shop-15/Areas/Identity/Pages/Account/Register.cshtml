@@ -1,12 +1,21 @@
 ﻿@page
 @model RegisterModel
 @{
+    @if (User.IsInRole(Shop_15.ENV.AdminRole))
+    {
+        <h1>Create new admin</h1>
+    }
+    else
+    {
+        <h1>@ViewData["Title"]</h1>
+
+        <h4>Create a new account.</h4>
+    }
+}
+@{
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<h4>Create a new account.</h4>
 <hr />
 <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
@@ -72,7 +81,14 @@
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Register</button>
+    @if (User.IsInRole(Shop_15.ENV.AdminRole))
+    {
+        <button type="submit" class="btn btn-warning">Register new admin</button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-primary">Register</button>
+    }
 </form>
 <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
     <div>
