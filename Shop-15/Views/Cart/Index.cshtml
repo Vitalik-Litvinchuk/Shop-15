@@ -1,27 +1,17 @@
-﻿@model Shop_15.Models.ViewModels.HomeVM
+﻿@model List<Shop_15.Models.Product>
 
 <div class="container">
-    <div class="text-center">
-        <button class="btn btn-dark px-3 py-1 filter-btn" data-filter="all">
-            All
-        </button>
-        @foreach (var item in Model.Categories)
-        {
-            <button class="btn btn-dark px-3 py-1 filter-btn" data-filter="@item.Name">
-                @item.Name
-            </button>
-        }
-    </div>
-    <br />
     <div class="row">
-        @foreach (var item in Model.Products)
+        @foreach (var item in Model)
         {
             <div class="col-lg-4 col-md-6 pb-4 ">
                 <partial model="item" name="_productCard" />
+                <a asp-action="RemoveFromCart" asp-route-id="@item.Id" class="btn btn-warning btn-lg text-white w-100" style="height:50px;">Remove from Cart</a>
             </div>
         }
     </div>
 </div>
+
 @section Scripts{
     <script>
         $(document).ready(function () {
