@@ -113,6 +113,10 @@ namespace Shop_15.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    if (User.IsInRole(ENV.AdminRole))
+                        await _userManager.AddToRoleAsync(user, ENV.AdminRole);
+                    else
+                        await _userManager.AddToRoleAsync(user, ENV.CustomerRole);
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
