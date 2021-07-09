@@ -8,13 +8,14 @@
         </div>
         <img class="card-img-top img-fluid d-block mx-auto mb-3" src="@ENV.PathImage@Model.Image" alt="Card image">
         <div class="card-body p-1 px-3 row">
-                <span class="badge p-2 border w-100" style="background-color:azure">@Model.Category.Name</span>
+            <span class="badge p-2 border w-100" style="background-color:azure">@Model.Category.Name</span>
             <div class="col-12 pt-2" style="font-size:13px; text-align:justify">
                 <p> @Model.ShortDescription</p>
             </div>
             <div class="col-12 p-1">
-                <a asp-action="Details" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-dark form-control btn-sm p-2" style="height:40px">View Details</a>
+                <a asp-action="Details" asp-controller="Cart" asp-route-id="@Model.Id" class="btn btn-dark form-control btn-sm p-2" style="height:40px">View Details</a>
             </div>
+            <a asp-action="RemoveFromCart" asp-route-id="@Model.Id" class="btn btn-warning btn-lg text-white btn-sm p-2 m-1 w-100" style="height:40px;">Remove from Cart</a>
         </div>
     </div>
 </div>

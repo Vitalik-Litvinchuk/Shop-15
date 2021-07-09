@@ -23,22 +23,21 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <li class="nav-item btn-secondary px-1 py-0 mx-1 rounded">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <li class="nav-item btn-secondary px-1 py-0 mx-1 rounded">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
-                        </li>
-                        <li>
+                    </ul>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Tools
+                        </button>
+                        <div class="dropdown-menu">
                             @if (httpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(ENV.SessionCart) != null)
                             {
-                                <a class="nav-link" asp-action="Index" asp-controller="Cart">
+                                <a class="dropdown-item text-dark" asp-action="Index" asp-controller="Cart">
                                     @{
                                         var count = httpContextAccessor.HttpContext.Session.Get<List<ShoppingCart>>(ENV.SessionCart).Count();
                                     }
@@ -47,13 +46,19 @@
                             }
                             else
                             {
-                                <a href="#" class="nav-link"> Cart &nbsp;(0)</a>
+                                <a href="#" class="dropdown-item"> Cart &nbsp;(0)</a>
                             }
-                        </li>
-                        <li>
-                            <partial name="_LoginPartial" />
-                        </li>
-                    </ul>
+                            @if (User.IsInRole(ENV.AdminRole))
+                            {
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
+                                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Create new admin</a>
+                            }
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </div>
         </nav>
