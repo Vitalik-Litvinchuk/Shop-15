@@ -9,6 +9,7 @@ using Shop_15.Models;
 using Shop_15.Services;
 using Microsoft.EntityFrameworkCore;
 using Shop_15.Models.ViewModels;
+using System.Security.Claims;
 
 namespace Shop_15.Controllers
 {
@@ -29,7 +30,7 @@ namespace Shop_15.Controllers
 
             List<Product> p = new List<Product>();
             foreach (var item in shoppingCartList)
-                foreach (var item2 in _db.Products.Include(p=>p.Category))
+                foreach (var item2 in _db.Products.Include(p => p.Category))
                     if (item.ProductId == item2.Id)
                         p.Add(item2);
             return View(p);
@@ -46,9 +47,7 @@ namespace Shop_15.Controllers
 
             var removeItem = shoppingCartList.SingleOrDefault(u => u.ProductId == id);
             if (removeItem != null)
-            {
                 shoppingCartList.Remove(removeItem);
-            }
 
             HttpContext.Session.Set(ENV.SessionCart, shoppingCartList);
             return RedirectToAction(nameof(Index));
@@ -73,16 +72,26 @@ namespace Shop_15.Controllers
             return View(detailVM);
         }
 
-        [HttpPost, ActionName("Details")]
-        public IActionResult DetailsPost(int id)
+        public IActionResult Order()
         {
+            var claimsIdntity = (ClaimsIdentity)User.Identity;
+            var clime = claimsIdntity.FindFirst(ClaimTypes.NameIdentifier);
+
             List<ShoppingCart> shoppingCartList = new List<ShoppingCart>();
-            if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(ENV.SessionCart) != null && HttpContext.Session.Get<IEnumerable<ShoppingCart>>(ENV.SessionCart).Count() > 0)
+            if (HttpContext.Session.Get<IEnumerable<ShoppingCart>>(ENV.SessionCart) != null &&
+                HttpContext.Session.Get<IEnumerable<ShoppingCart>>(ENV.SessionCart).Count() > 0)
                 shoppingCartList = HttpContext.Session.Get<List<ShoppingCart>>(ENV.SessionCart);
 
-            shoppingCartList.Add(new ShoppingCart { ProductId = id });
-            HttpContext.Session.Set(ENV.SessionCart, shoppingCartList);
-            return RedirectToAction("Index");
+            List<int> productInCart = shoppingCartList.Select(i => i.ProductId).ToList();
+            IEnumerable<Product> productList = _db.Products.Where(i => productInCart.Contains(i.Id));
+
+            ProductUserVM ProductUserVM = new ProductUserVM()
+            {
+                AppUser = _db.AppUsers.FirstOrDefault(i => i.Id == clime.Value),
+                ProductList = productList.ToList()
+            };
+
+            return View(ProductUserVM);
         }
     }
 }

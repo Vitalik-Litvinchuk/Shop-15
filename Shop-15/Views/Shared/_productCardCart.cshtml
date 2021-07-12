@@ -13,9 +13,9 @@
                 <p> @Model.ShortDescription</p>
             </div>
             <div class="col-12 p-1">
-                <a asp-action="Details" asp-controller="Cart" asp-route-id="@Model.Id" class="btn btn-dark form-control btn-sm p-2" style="height:40px">View Details</a>
+                <a asp-action="Details" asp-controller="Cart" asp-route-id="@Model.Id" class="btn btn-dark form-control btn-sm my-1 p-2" style="height:40px">View Details</a>
+                <a asp-action="RemoveFromCart" asp-route-id="@Model.Id" class="btn btn-warning form-control text-white btn-sm my-1 p-2 w-100" style="height:40px;">Remove from Cart</a>
             </div>
-            <a asp-action="RemoveFromCart" asp-route-id="@Model.Id" class="btn btn-warning btn-lg text-white btn-sm p-2 m-1 w-100" style="height:40px;">Remove from Cart</a>
         </div>
     </div>
 </div>
