@@ -22,12 +22,14 @@ namespace Shop_15.Controllers
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IEmailSender _emailSender;
 
-        public CartController(ApplicationDbContext db, IEmailSender emailSender)
+        public CartController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment, IEmailSender emailSender)
         {
             _db = db;
             _emailSender = emailSender;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -107,13 +109,27 @@ namespace Shop_15.Controllers
         // Send email info about order
         public async Task<IActionResult> OrderPost(ProductUserVM productUserVM)
         {
-            string namesOfProduct = "";
+            var pathTemplate = _webHostEnvironment.WebRootPath + Path.DirectorySeparatorChar.ToString()
+                + "templates" + Path.DirectorySeparatorChar.ToString() + "OrderConfirmation.html";
+
+            var subject = "New order";
+            string HtmlBody = "";
+
+            using (StreamReader sr = System.IO.File.OpenText(pathTemplate))
+                HtmlBody = sr.ReadToEnd();
+
+            StringBuilder productSB = new StringBuilder();
+            productSB.Append("<br>");
             foreach (var item in productUserVM.ProductList)
-                namesOfProduct += $"Name: {item.Name}\n";
+                productSB.Append($"<div style='border: 2px solid black; width: max-content; padding: 1% 2%; margin: 1% 3%; font-size: 1.2rem'>{item.Name} <br> Price: {item.Price}</div>");
 
-            string message = $"{productUserVM.AppUser.Name} " + $"{productUserVM.AppUser.Surname}\n" + $"{productUserVM.AppUser.Email}\n" + $"{namesOfProduct}";
+            string message = string.Format(
+                HtmlBody,
+                "<h1 style='text-align: center'>" + productUserVM.AppUser.Name + " " + productUserVM.AppUser.Surname + "<h1>",
+                productSB.ToString()
+                );
 
-            await _emailSender.SendEmailAsync(productUserVM.AppUser.Email, "Order", message);
+            await _emailSender.SendEmailAsync(ENV.AdminEmail, subject, message);
             return RedirectToAction(nameof(OrderConfirmation));
         }
 

@@ -12,5 +12,7 @@ namespace Shop_15
 
         public static string AdminRole = "Admin";
         public static string CustomerRole = "Customer";
+
+        public const string AdminEmail = "geres1793@gmail.com";
     }
 }
