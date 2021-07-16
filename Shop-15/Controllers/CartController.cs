@@ -10,16 +10,24 @@ using Shop_15.Services;
 using Microsoft.EntityFrameworkCore;
 using Shop_15.Models.ViewModels;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using System.Text;
 
 namespace Shop_15.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly IEmailSender _emailSender;
 
-        public CartController(ApplicationDbContext db)
+        public CartController(ApplicationDbContext db, IEmailSender emailSender)
         {
             _db = db;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -92,6 +100,27 @@ namespace Shop_15.Controllers
             };
 
             return View(ProductUserVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        // Send email info about order
+        public async Task<IActionResult> OrderPost(ProductUserVM productUserVM)
+        {
+            string namesOfProduct = "";
+            foreach (var item in productUserVM.ProductList)
+                namesOfProduct += $"Name: {item.Name}\n";
+
+            string message = $"{productUserVM.AppUser.Name} " + $"{productUserVM.AppUser.Surname}\n" + $"{productUserVM.AppUser.Email}\n" + $"{namesOfProduct}";
+
+            await _emailSender.SendEmailAsync(productUserVM.AppUser.Email, "Order", message);
+            return RedirectToAction(nameof(OrderConfirmation));
+        }
+
+        public IActionResult OrderConfirmation()
+        {
+            HttpContext.Session.Clear();
+            return View();
         }
     }
 }
