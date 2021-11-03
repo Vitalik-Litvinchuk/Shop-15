@@ -1,0 +1,62 @@
+﻿@model Shop_15.Models.ViewModels.DetailVM
+
+<input asp-for="@Model.Product.Id" hidden />
+<div class="main-panel">
+    <div class="container">
+        <div class="row overflow-hidden">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="profile-card p-3">
+
+                        <div class="profile-header">
+
+                            <div class="cover-image">
+                                <img class="img-fluid d-block mx-auto mb-3" src="@ENV.PathImage@Model.Product.Image">
+                            </div>
+
+                        </div>
+
+                        <div class="profile-content">
+                            <span class="badge p-2 border w-100" style="background-color:azure">@Model.Product.Category.Name</span>
+                            <div><h4 class="float-left">@Model.Product.Name</h4></div>
+                            <div><h1 class="float-right"><span class="text-info">@Model.Product.Price&#8372;</span></h1> </div>
+                        </div>
+                    </div>
+                    <form method="post">
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-12 pb-2 ">
+                                    @if (Model.InCart)
+                                    {
+                                        <a asp-action="RemoveFromCart" asp-route-id="@Model.Product.Id" class="btn btn-warning btn-lg text-white w-100" style="height:50px;">Remove from Cart</a>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" asp-route-id="@Model.Product.Id" class="btn btn-info btn-lg w-100" style="height:50px;">Add to Cart</button>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col pt-2">
+                                    <a asp-action="Index" class="btn btn-success btn-lg w-100" style="height:50px;">Back to List</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title font-weight-bold">About</p>
+                        <hr>
+                        <div class="col-12 pt-2" " style="font-size:13px; text-align:justify; overflow:auto;">
+                            @Html.Raw(@Model.Product.Description)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
